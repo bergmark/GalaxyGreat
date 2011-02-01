@@ -13,18 +13,22 @@ void gg_setPlayerVespene(int playerIndex, int amount) {
 void gg_createVisibilityRevealer(int playerId, region reg) {
   VisRevealerCreate(playerId, reg);
 }
-// With default facing in center of region.
-unit gg_createUnitInRegion(int playerId, string unitName, region reg, string whereInRegion) {
-  point p = RegionRandomPoint(reg);
-  if (StringEqual(whereInRegion, "random", c_stringNoCase)) {
-    p = RegionRandomPoint(reg);
-  } else if (StringEqual(whereInRegion, "center", c_stringNoCase)) {
-    p = RegionGetCenter(reg);
+
+point pointFromRegion(region reg, string regionLocation) {
+  if (StringEqual(regionLocation, "random", c_stringNoCase)) {
+    return RegionRandomPoint(reg);
+  } else if (StringEqual(regionLocation, "center", c_stringNoCase)) {
+    return RegionGetCenter(reg);
   } else {
-    p = RegionRandomPoint(reg);
+    gg_log("gg_pointFromRegion invalid regionLocation.");
+    return RegionRandomPoint(reg);
   }
+}
+
+// With default facing in center of region.
+unit gg_createUnitInRegion(int playerId, string unitName, region reg, string regionLocation) {
   // > What are the remaining int args?
-  libNtve_gf_CreateUnitsWithDefaultFacing(playerId, unitName, 0, 1, p);
+  libNtve_gf_CreateUnitsWithDefaultFacing(playerId, unitName, 0, 1, pointFromRegion(reg, regionLocation));
   return UnitLastCreated();
 }
 
@@ -57,8 +61,6 @@ void gg_issueOrderToPoint(unit u, string cmd, point pt, string p) {
   UnitIssueOrder(u, OrderTargetingPoint(gg_abilityCommandFromString("move"), pt),
                  gg_abilityOrderQueueFromString(p));
 }
-
-
 
 void gg_LibraryInit() {
 }
