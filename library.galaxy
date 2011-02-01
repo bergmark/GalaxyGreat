@@ -14,7 +14,7 @@ void gg_createVisibilityRevealer(int playerId, region reg) {
   VisRevealerCreate(playerId, reg);
 }
 
-point pointFromRegion(region reg, string regionLocation) {
+point gg_pointFromRegion(region reg, string regionLocation) {
   if (StringEqual(regionLocation, "random", c_stringNoCase)) {
     return RegionRandomPoint(reg);
   } else if (StringEqual(regionLocation, "center", c_stringNoCase)) {
@@ -28,7 +28,7 @@ point pointFromRegion(region reg, string regionLocation) {
 // With default facing in center of region.
 unit gg_createUnitInRegion(int playerId, string unitName, region reg, string regionLocation) {
   // > What are the remaining int args?
-  libNtve_gf_CreateUnitsWithDefaultFacing(playerId, unitName, 0, 1, pointFromRegion(reg, regionLocation));
+  libNtve_gf_CreateUnitsWithDefaultFacing(playerId, unitName, 0, 1, gg_pointFromRegion(reg, regionLocation));
   return UnitLastCreated();
 }
 
@@ -60,6 +60,14 @@ void gg_issueOrder(unit u, string cmd, string p) {
 void gg_issueOrderToPoint(unit u, string cmd, point pt, string p) {
   UnitIssueOrder(u, OrderTargetingPoint(gg_abilityCommandFromString("move"), pt),
                  gg_abilityOrderQueueFromString(p));
+}
+void gg_groupIssueOrder(unitgroup ug, string cmd, string p) {
+  UnitGroupIssueOrder(ug, Order(gg_abilityCommandFromString(cmd)),
+                      gg_abilityOrderQueueFromString(p));
+}
+void gg_groupIssueOrderToPoint(unitgroup ug, string cmd, point pt, string p) {
+  UnitGroupIssueOrder(ug, OrderTargetingPoint(gg_abilityCommandFromString("move"), pt),
+                      gg_abilityOrderQueueFromString(p));
 }
 
 void gg_LibraryInit() {

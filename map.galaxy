@@ -23,9 +23,10 @@ void gg_MapInit()
   u = gg_createUnitInRegion(1, "Sentry", endRegion, "random");
   UnitGroupAdd(ug, u);
 
-  i = UnitGroupCount(ug, c_unitCountAlive);
-  while (i > 0) {
-    gg_issueOrderToPoint(UnitGroupUnit(ug, i), "move", RegionGetCenter(startRegion), "addtoend");
-    i = i - 1;
-  }
+  // i = UnitGroupCount(ug, c_unitCountAlive);
+  // while (i > 0) {
+  //   gg_issueOrderToPoint(UnitGroupUnit(ug, i), "move", RegionGetCenter(startRegion), "addtoend");
+  //   i = i - 1;
+  // }
+  gg_groupIssueOrderToPoint(ug, "move", gg_pointFromRegion(startRegion, "center"), "addtoend");
 }
