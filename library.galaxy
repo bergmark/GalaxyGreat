@@ -1,0 +1,21 @@
+// playerIndex -1..15
+void gg_setPlayerMinerals(int playerIndex, int amount) {
+  PlayerModifyPropertyInt(playerIndex, c_playerPropMinerals, c_playerPropOperSetTo, amount);
+}
+void gg_setPlayerVespene(int playerIndex, int amount) {
+  PlayerModifyPropertyInt(playerIndex, c_playerPropVespene, c_playerPropOperSetTo, amount);
+}
+void gg_createVisibilityRevealer(int playerId, int regionId) {
+  VisRevealerCreate(playerId, RegionFromId(regionId));
+}
+// With default facing in center of region.
+void gg_createUnitInRegion(int playerId, string unitName, int regionId) {
+  // > What are the remaining int args?
+  libNtve_gf_CreateUnitsWithDefaultFacing(playerId, unitName, 0, 1, RegionGetCenter(RegionFromId(regionId)));
+}
+void gg_log(text t) {
+  // > 1st arg?
+  TriggerDebugOutput(1, t, true);
+}
+void gg_LibraryInit() {
+}

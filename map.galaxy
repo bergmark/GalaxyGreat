@@ -1,0 +1,8 @@
+static int startRegionId = 1;
+static int endRegionId = 2;
+
+void gg_MapInit() {
+  gg_log(StringToText("Map Loaded"));
+  gg_createVisibilityRevealer(1, startRegionId);
+  gg_createUnitInRegion(1, "Probe", startRegionId);
+}
