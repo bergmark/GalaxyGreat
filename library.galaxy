@@ -1,3 +1,8 @@
+void gg_log(string s) {
+  // > 1st arg? Player?
+  TriggerDebugOutput(1, StringToText(s), true);
+}
+
 // playerIndex -1..15
 void gg_setPlayerMinerals(int playerIndex, int amount) {
   PlayerModifyPropertyInt(playerIndex, c_playerPropMinerals, c_playerPropOperSetTo, amount);
@@ -13,9 +18,34 @@ void gg_createUnitInRegion(int playerId, string unitName, int regionId) {
   // > What are the remaining int args?
   libNtve_gf_CreateUnitsWithDefaultFacing(playerId, unitName, 0, 1, RegionGetCenter(RegionFromId(regionId)));
 }
-void gg_log(text t) {
-  // > 1st arg?
-  TriggerDebugOutput(1, t, true);
+unit gg_createUnitInRegionAtRandomPoint(int playerId, string unitName, int regionId) {
+  libNtve_gf_CreateUnitsWithDefaultFacing(playerId, unitName, 0, 1, RegionRandomPoint(RegionFromId(regionId)));
+  return UnitLastCreated();
 }
+
+
+abilcmd gg_abilityCommandFromString(string commandName) {
+  if (StringEqual(commandName, "move", c_stringNoCase)) {
+    return AbilityCommand("move", 0);
+  }
+  if (StringEqual(commandName, "dance", c_stringNoCase)) {
+    return AbilityCommand("stop", 3);
+  }
+  gg_log("Missing commandName name in gg_abilityCommandFromString");
+  return AbilityCommand("move", 0);
+}
+
+void gg_issueDance(unit u) {
+  UnitIssueOrder(u, Order(gg_abilityCommandFromString("dance")), c_orderQueueReplace);
+}
+void gg_issueOrder(unit u, string cmd, string p) {
+  UnitIssueOrder(u, Order(gg_abilityCommandFromString("dance")), c_orderQueueReplace);
+}
+void gg_issueOrderToPoint(unit u, string cmd, point pt, string p) {
+  UnitIssueOrder(u, OrderTargetingPoint(gg_abilityCommandFromString("move"), pt), c_orderQueueAddToEnd);
+}
+
+
+
 void gg_LibraryInit() {
 }
