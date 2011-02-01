@@ -10,8 +10,8 @@ void gg_setPlayerMinerals(int playerIndex, int amount) {
 void gg_setPlayerVespene(int playerIndex, int amount) {
   PlayerModifyPropertyInt(playerIndex, c_playerPropVespene, c_playerPropOperSetTo, amount);
 }
-void gg_createVisibilityRevealer(int playerId, int regionId) {
-  VisRevealerCreate(playerId, RegionFromId(regionId));
+void gg_createVisibilityRevealer(int playerId, region reg) {
+  VisRevealerCreate(playerId, reg);
 }
 // With default facing in center of region.
 void gg_createUnitInRegion(int playerId, string unitName, int regionId) {

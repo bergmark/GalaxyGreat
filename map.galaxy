@@ -1,14 +1,17 @@
 static int startRegionId = 1;
 static int endRegionId = 2;
 static int allRegionId = 3;
-
-static unitgroup ug = UnitGroupEmpty();
+static region startRegion = RegionFromId(1);
+static region endRegion = RegionFromId(2);
+static region allRegion = RegionFromId(3);
 
 void gg_MapInit()
 {
+  unitgroup ug = UnitGroupEmpty();
   unit u;
+  int i;
   gg_log("Map Loaded");
-  gg_createVisibilityRevealer(1, allRegionId);
+  gg_createVisibilityRevealer(1, allRegion);
   gg_createUnitInRegion(1, "Marine", startRegionId);
 
   gg_setPlayerMinerals(1, 1000);
@@ -16,5 +19,17 @@ void gg_MapInit()
 
   u = gg_createUnitInRegionAtRandomPoint(1, "Marauder", endRegionId);
   gg_issueOrder(u, "dance", "replace");
-  gg_issueOrderToPoint(u, "move", RegionGetCenter(RegionFromId(startRegionId)), "addtoend");
+  gg_issueOrderToPoint(u, "move", RegionGetCenter(startRegion), "addtoend");
+
+  u = gg_createUnitInRegionAtRandomPoint(1, "Sentry", endRegionId);
+  UnitGroupAdd(ug, u);
+  u = gg_createUnitInRegionAtRandomPoint(1, "Sentry", endRegionId);
+  UnitGroupAdd(ug, u);
+
+  i = UnitGroupCount(ug, c_unitCountAlive);
+  while (i > 0) {
+    u = UnitGroupUnit(ug, i);
+    gg_issueOrderToPoint(u, "move", RegionGetCenter(startRegion), "addtoend");
+    i = i - 1;
+  }
 }
