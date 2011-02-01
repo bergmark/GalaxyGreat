@@ -14,12 +14,17 @@ void gg_createVisibilityRevealer(int playerId, region reg) {
   VisRevealerCreate(playerId, reg);
 }
 // With default facing in center of region.
-void gg_createUnitInRegion(int playerId, string unitName, region reg) {
+unit gg_createUnitInRegion(int playerId, string unitName, region reg, string whereInRegion) {
+  point p = RegionRandomPoint(reg);
+  if (StringEqual(whereInRegion, "random", c_stringNoCase)) {
+    p = RegionRandomPoint(reg);
+  } else if (StringEqual(whereInRegion, "center", c_stringNoCase)) {
+    p = RegionGetCenter(reg);
+  } else {
+    p = RegionRandomPoint(reg);
+  }
   // > What are the remaining int args?
-  libNtve_gf_CreateUnitsWithDefaultFacing(playerId, unitName, 0, 1, RegionGetCenter(reg));
-}
-unit gg_createUnitInRegionAtRandomPoint(int playerId, string unitName, region reg) {
-  libNtve_gf_CreateUnitsWithDefaultFacing(playerId, unitName, 0, 1, RegionRandomPoint(reg));
+  libNtve_gf_CreateUnitsWithDefaultFacing(playerId, unitName, 0, 1, p);
   return UnitLastCreated();
 }
 

@@ -9,18 +9,18 @@ void gg_MapInit()
   int i;
   gg_log("Map Loaded");
   gg_createVisibilityRevealer(1, allRegion);
-  gg_createUnitInRegion(1, "Marine", startRegion);
+  gg_createUnitInRegion(1, "Marine", startRegion, "center");
 
   gg_setPlayerMinerals(1, 1000);
   gg_setPlayerVespene(1, 2000);
 
-  u = gg_createUnitInRegionAtRandomPoint(1, "Marauder", endRegion);
+  u = gg_createUnitInRegion(1, "Marauder", endRegion, "random");
   gg_issueOrder(u, "dance", "replace");
   gg_issueOrderToPoint(u, "move", RegionGetCenter(startRegion), "addtoend");
 
-  u = gg_createUnitInRegionAtRandomPoint(1, "Sentry", endRegion);
+  u = gg_createUnitInRegion(1, "Sentry", endRegion, "random");
   UnitGroupAdd(ug, u);
-  u = gg_createUnitInRegionAtRandomPoint(1, "Sentry", endRegion);
+  u = gg_createUnitInRegion(1, "Sentry", endRegion, "random");
   UnitGroupAdd(ug, u);
 
   i = UnitGroupCount(ug, c_unitCountAlive);
