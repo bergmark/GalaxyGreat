@@ -41,6 +41,6 @@ void gg_MapInit() {
   gg_groupIssueOrderToPoint(ug, "move", gg_pointFromRegion(startRegion, "center"), "addtoend");
 
   // Trigger for killing units.
-  gg_event_unitEnteredRegion("gt_enterStart", startRegion);
-  gg_event_unitLeftRegion("gt_leaveEnd", endRegion);
+  gg_event_unitEnteredRegion("gt_enterStart", null, startRegion);
+  gg_event_unitLeftRegion("gt_leaveEnd", null, endRegion);
 }

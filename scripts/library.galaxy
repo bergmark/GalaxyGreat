@@ -77,11 +77,11 @@ void gg_groupIssueOrderToPoint(unitgroup ug, string cmd, point pt, string p) {
 void gg_killUnit(unit u) {
   UnitSetPropertyFixed(u, c_unitPropLife, 0.0);
 }
-void gg_event_unitEnteredRegion(string callback, region reg) {
-  TriggerAddEventUnitRegion(TriggerCreate(callback), null, reg, true);
+void gg_event_unitEnteredRegion(string callback, unitref u, region reg) {
+  TriggerAddEventUnitRegion(TriggerCreate(callback), u, reg, true);
 }
-void gg_event_unitLeftRegion(string callback, region reg) {
-  TriggerAddEventUnitRegion(TriggerCreate(callback), null, reg, false);
+void gg_event_unitLeftRegion(string callback, unitref u, region reg) {
+  TriggerAddEventUnitRegion(TriggerCreate(callback), u, reg, false);
 }
 
 void gg_LibraryInit() {
