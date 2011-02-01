@@ -2,28 +2,6 @@ static region startRegion = RegionFromId(1);
 static region endRegion = RegionFromId(2);
 static region allRegion = RegionFromId(3);
 
-timer gv_myTimer = TimerCreate();
-trigger gt_timerTriggered;
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: timerTriggered
-//--------------------------------------------------------------------------------------------------
-bool gt_timerTriggered_Func (bool testConds, bool runActions) {
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    gg_log("Baboosh");
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_timerTriggered_Init () {
-    gt_timerTriggered = TriggerCreate("gt_timerTriggered_Func");
-    TriggerAddEventTimer(gt_timerTriggered, gv_myTimer);
-}
-
 bool gt_enterStart(bool testConds, bool runActions) {
   if (!runActions) { return true; }
   gg_killUnit(EventUnit());
@@ -34,6 +12,8 @@ bool gt_leaveEnd(bool testConds, bool runActions) {
   UnitSetPropertyFixed(EventUnit(), c_unitPropLife, 10.0);
   return true;
 }
+
+void timerExample();
 
 void gg_MapInit() {
   unitgroup ug = UnitGroupEmpty();
@@ -66,8 +46,18 @@ void gg_MapInit() {
   gg_event_unitEnteredRegion("gt_enterStart", null, startRegion);
   gg_event_unitLeftRegion("gt_leaveEnd", null, endRegion);
 
-  gv_myTimer = TimerCreate();
+  timerExample();
+}
+
+trigger gt_timerTriggered;
+bool gt_timerTriggeredCallback(bool testConds, bool runActions) {
+  if (!runActions) { return true; }
+  gg_log("Baboosh");
+  return true;
+}
+void timerExample() {
+  timer gv_myTimer = TimerCreate();
   TimerStart(gv_myTimer, 5.0, true, c_timeGame);
-  gt_timerTriggered_Init();
-  gg_log("inited!");
+  gt_timerTriggered = TriggerCreate("gt_timerTriggeredCallback");
+  TriggerAddEventTimer(gt_timerTriggered, gv_myTimer);
 }
