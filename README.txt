@@ -15,6 +15,8 @@ through the import step again each time. (Hint: In OS X you can select
 the import window and press cmd+I, RET, RET, cmd+S, cmd+F9 to import,
 save and run SC2.
 
+To make a custom map, leave `library.galaxy` as is and make
+modifications in `map.galaxy`.
 
 == Galaxy introduction:
 
@@ -37,3 +39,4 @@ save and run SC2.
 * `// comments`
 * /* comments not implemented */
 * include directive `include "TriggerLibs/NativeLib"`
+* C-style makes Emacs c-mode work well for editing.
