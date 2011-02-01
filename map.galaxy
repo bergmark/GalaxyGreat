@@ -10,12 +10,11 @@ void gg_MapInit()
   gg_log("Map Loaded");
   gg_createVisibilityRevealer(1, allRegionId);
   gg_createUnitInRegion(1, "Marine", startRegionId);
+
+  gg_setPlayerMinerals(1, 1000);
+  gg_setPlayerVespene(1, 2000);
+
   u = gg_createUnitInRegionAtRandomPoint(1, "Marauder", endRegionId);
-  //gg_issueDance(u);
-  //unitgroup unitGroup = UnitGroupEmpty();
-  //UnitGroupAdd(unitGroup, u);
-  gg_issueOrder(u, "dance", "do");
-  gg_issueOrderToPoint(u, "move", RegionGetCenter(RegionFromId(startRegionId)), "queue");
-  //gg_issueDance(u);
-  //UnitIssueOrder(u, OrderTargetingPoint(AbilityCommand("move", 0), RegionGetCenter(RegionFromId(startRegionId))), c_orderQueueAddToEnd);
+  gg_issueOrder(u, "dance", "replace");
+  gg_issueOrderToPoint(u, "move", RegionGetCenter(RegionFromId(startRegionId)), "addtoend");
 }
