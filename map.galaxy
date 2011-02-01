@@ -1,6 +1,3 @@
-static int startRegionId = 1;
-static int endRegionId = 2;
-static int allRegionId = 3;
 static region startRegion = RegionFromId(1);
 static region endRegion = RegionFromId(2);
 static region allRegion = RegionFromId(3);
@@ -12,24 +9,23 @@ void gg_MapInit()
   int i;
   gg_log("Map Loaded");
   gg_createVisibilityRevealer(1, allRegion);
-  gg_createUnitInRegion(1, "Marine", startRegionId);
+  gg_createUnitInRegion(1, "Marine", startRegion);
 
   gg_setPlayerMinerals(1, 1000);
   gg_setPlayerVespene(1, 2000);
 
-  u = gg_createUnitInRegionAtRandomPoint(1, "Marauder", endRegionId);
+  u = gg_createUnitInRegionAtRandomPoint(1, "Marauder", endRegion);
   gg_issueOrder(u, "dance", "replace");
   gg_issueOrderToPoint(u, "move", RegionGetCenter(startRegion), "addtoend");
 
-  u = gg_createUnitInRegionAtRandomPoint(1, "Sentry", endRegionId);
+  u = gg_createUnitInRegionAtRandomPoint(1, "Sentry", endRegion);
   UnitGroupAdd(ug, u);
-  u = gg_createUnitInRegionAtRandomPoint(1, "Sentry", endRegionId);
+  u = gg_createUnitInRegionAtRandomPoint(1, "Sentry", endRegion);
   UnitGroupAdd(ug, u);
 
   i = UnitGroupCount(ug, c_unitCountAlive);
   while (i > 0) {
-    u = UnitGroupUnit(ug, i);
-    gg_issueOrderToPoint(u, "move", RegionGetCenter(startRegion), "addtoend");
+    gg_issueOrderToPoint(UnitGroupUnit(ug, i), "move", RegionGetCenter(startRegion), "addtoend");
     i = i - 1;
   }
 }
