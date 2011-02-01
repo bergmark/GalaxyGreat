@@ -10,10 +10,6 @@ trigger gt_kill;
    UnitSetPropertyFixed(EventUnit(), c_unitPropLife, 0.0);
    return true;
  }
-void gt_killInit () {
-  gt_kill = TriggerCreate("gt_killFunc");
-  TriggerAddEventUnitRegion(gt_kill, null, startRegion, true);
-}
 
 void gg_MapInit()
 {
@@ -42,7 +38,8 @@ void gg_MapInit()
   // }
   ug = gg_createUnitsInRegion(1, "Sentry", 10, endRegion, "center");
   gg_groupIssueOrderToPoint(ug, "move", gg_pointFromRegion(startRegion, "center"), "addtoend");
-  // Kill unit
-  // UnitSetPropertyFixed(UnitLastCreated(), c_unitPropLife, 0.0);
-  gt_killInit();
+
+  // Trigger for killing units.
+  gt_kill = TriggerCreate("gt_killFunc");
+  TriggerAddEventUnitRegion(gt_kill, null, startRegion, true);
 }
