@@ -84,5 +84,18 @@ void gg_event_unitLeftRegion(string callback, unitref u, region reg) {
   TriggerAddEventUnitRegion(TriggerCreate(callback), u, reg, false);
 }
 
+timer gg_timer_createRepeating(fixed interval, string callback) {
+  timer t = TimerCreate();
+  TimerStart(t, interval, true, c_timeGame);
+  TriggerAddEventTimer(TriggerCreate(callback), t);
+  return t;
+}
+timer gg_timer_create(fixed interval, string callback) {
+  timer t = TimerCreate();
+  TimerStart(t, interval, false, c_timeGame);
+  TriggerAddEventTimer(TriggerCreate(callback), t);
+  return t;
+}
+
 void gg_LibraryInit() {
 }
