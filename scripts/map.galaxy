@@ -1,5 +1,5 @@
-static region startRegion = RegionFromId(1);
-static region endRegion = RegionFromId(2);
+static region deathRegion = RegionFromId(1);
+static region startRegion = RegionFromId(2);
 static region allRegion = RegionFromId(3);
 static region timerspawnRegion = RegionFromId(4);
 
@@ -22,30 +22,30 @@ void gg_MapInit() {
   int i;
   gg_log("Map Loaded");
   gg_createVisibilityRevealer(1, allRegion);
-  gg_createUnitInRegion(1, "Marine", startRegion, "center");
+  gg_createUnitInRegion(1, "Marine", deathRegion, "center");
 
   gg_setPlayerMinerals(1, 1000);
   gg_setPlayerVespene(1, 2000);
 
-  u = gg_createUnitInRegion(1, "Marauder", endRegion, "random");
+  u = gg_createUnitInRegion(1, "Marauder", startRegion, "random");
   gg_issueOrder(u, "dance", "replace");
-  gg_issueOrderToPoint(u, "move", RegionGetCenter(startRegion), "addtoend");
+  gg_issueOrderToPoint(u, "move", RegionGetCenter(deathRegion), "addtoend");
 
-  // u = gg_createUnitInRegion(1, "Sentry", endRegion, "random");
+  // u = gg_createUnitInRegion(1, "Sentry", startRegion, "random");
   // UnitGroupAdd(ug, u);
-  // u = gg_createUnitInRegion(1, "Sentry", endRegion, "random");
+  // u = gg_createUnitInRegion(1, "Sentry", startRegion, "random");
   // UnitGroupAdd(ug, u);
   // i = UnitGroupCount(ug, c_unitCountAlive);
   // while (i > 0) {
-  //   gg_issueOrderToPoint(UnitGroupUnit(ug, i), "move", RegionGetCenter(startRegion), "addtoend");
+  //   gg_issueOrderToPoint(UnitGroupUnit(ug, i), "move", RegionGetCenter(deathRegion), "addtoend");
   //   i = i - 1;
   // }
-  ug = gg_createUnitsInRegion(1, "Sentry", 10, endRegion, "center");
-  gg_groupIssueOrderToPoint(ug, "move", gg_pointFromRegion(startRegion, "center"), "addtoend");
+  ug = gg_createUnitsInRegion(1, "Sentry", 10, startRegion, "center");
+  gg_groupIssueOrderToPoint(ug, "move", gg_pointFromRegion(deathRegion, "center"), "addtoend");
 
   // Trigger for killing units.
-  gg_event_unitEnteredRegion("gt_enterStart", null, startRegion);
-  gg_event_unitLeftRegion("gt_leaveEnd", null, endRegion);
+  gg_event_unitEnteredRegion("gt_enterStart", null, deathRegion);
+  gg_event_unitLeftRegion("gt_leaveEnd", null, startRegion);
 
   timerExample();
 }
@@ -54,14 +54,14 @@ bool gt_repeatingTimerCallback(bool testConds, bool runActions) {
   unitgroup ug;
   if (!runActions) { return true; }
   ug = gg_createUnitsInRegion(1, "Hellion", 2, timerspawnRegion, "center");
-  gg_groupIssueOrderToPoint(ug, "move", gg_pointFromRegion(startRegion, "center"), "addtoend");
+  gg_groupIssueOrderToPoint(ug, "move", gg_pointFromRegion(deathRegion, "center"), "addtoend");
   return true;
 }
 bool gt_timerCallback(bool testConds, bool runActions) {
   if (!runActions) { return true; }
-  gg_timer_createRepeating(4.0, "gt_repeatingTimerCallback");
+  gg_timer_createRepeating(2.0, "gt_repeatingTimerCallback");
   return true;
 }
 void timerExample() {
-  gg_timer_create(5.0, "gt_timerCallback");
+  gg_timer_create(1.0, "gt_timerCallback");
 }
