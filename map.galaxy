@@ -7,7 +7,7 @@ trigger gt_kill;
    if (!runActions) {
      return true;
    }
-   UnitSetPropertyFixed(EventUnit(), c_unitPropLife, 0.0);
+   gg_killUnit(EventUnit());
    return true;
  }
 

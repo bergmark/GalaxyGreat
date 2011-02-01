@@ -74,5 +74,9 @@ void gg_groupIssueOrderToPoint(unitgroup ug, string cmd, point pt, string p) {
                       gg_abilityOrderQueueFromString(p));
 }
 
+void gg_killUnit(unit u) {
+  UnitSetPropertyFixed(u, c_unitPropLife, 0.0);
+}
+
 void gg_LibraryInit() {
 }
