@@ -18,15 +18,15 @@ void gg_MapInit()
   gg_issueOrder(u, "dance", "replace");
   gg_issueOrderToPoint(u, "move", RegionGetCenter(startRegion), "addtoend");
 
-  u = gg_createUnitInRegion(1, "Sentry", endRegion, "random");
-  UnitGroupAdd(ug, u);
-  u = gg_createUnitInRegion(1, "Sentry", endRegion, "random");
-  UnitGroupAdd(ug, u);
-
+  // u = gg_createUnitInRegion(1, "Sentry", endRegion, "random");
+  // UnitGroupAdd(ug, u);
+  // u = gg_createUnitInRegion(1, "Sentry", endRegion, "random");
+  // UnitGroupAdd(ug, u);
   // i = UnitGroupCount(ug, c_unitCountAlive);
   // while (i > 0) {
   //   gg_issueOrderToPoint(UnitGroupUnit(ug, i), "move", RegionGetCenter(startRegion), "addtoend");
   //   i = i - 1;
   // }
+  ug = gg_createUnitsInRegion(1, "Sentry", 10, endRegion, "center");
   gg_groupIssueOrderToPoint(ug, "move", gg_pointFromRegion(startRegion, "center"), "addtoend");
 }

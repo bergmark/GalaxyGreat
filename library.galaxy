@@ -28,8 +28,12 @@ point gg_pointFromRegion(region reg, string regionLocation) {
 // With default facing in center of region.
 unit gg_createUnitInRegion(int playerId, string unitName, region reg, string regionLocation) {
   // > What are the remaining int args?
-  libNtve_gf_CreateUnitsWithDefaultFacing(playerId, unitName, 0, 1, gg_pointFromRegion(reg, regionLocation));
+  libNtve_gf_CreateUnitsWithDefaultFacing(1, unitName, 0, playerId, gg_pointFromRegion(reg, regionLocation));
   return UnitLastCreated();
+}
+unitgroup gg_createUnitsInRegion(int playerId, string unitName, int amount, region reg, string regionLocation) {
+  libNtve_gf_CreateUnitsWithDefaultFacing(amount, unitName, 0, playerId, gg_pointFromRegion(reg, regionLocation));
+  return UnitLastCreatedGroup();
 }
 
 abilcmd gg_abilityCommandFromString(string commandName) {
