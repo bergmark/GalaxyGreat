@@ -2,6 +2,19 @@ static region startRegion = RegionFromId(1);
 static region endRegion = RegionFromId(2);
 static region allRegion = RegionFromId(3);
 
+trigger gt_kill;
+ bool gt_killFunc (bool testConds, bool runActions) {
+   if (!runActions) {
+     return true;
+   }
+   UnitSetPropertyFixed(EventUnit(), c_unitPropLife, 0.0);
+   return true;
+ }
+void gt_killInit () {
+  gt_kill = TriggerCreate("gt_killFunc");
+  TriggerAddEventUnitRegion(gt_kill, null, startRegion, true);
+}
+
 void gg_MapInit()
 {
   unitgroup ug = UnitGroupEmpty();
@@ -29,4 +42,7 @@ void gg_MapInit()
   // }
   ug = gg_createUnitsInRegion(1, "Sentry", 10, endRegion, "center");
   gg_groupIssueOrderToPoint(ug, "move", gg_pointFromRegion(startRegion, "center"), "addtoend");
+  // Kill unit
+  // UnitSetPropertyFixed(UnitLastCreated(), c_unitPropLife, 0.0);
+  gt_killInit();
 }
