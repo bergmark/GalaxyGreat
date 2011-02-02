@@ -2,6 +2,8 @@ static region deathRegion = RegionFromId(1);
 static region startRegion = RegionFromId(2);
 static region allRegion = RegionFromId(3);
 static region timerspawnRegion = RegionFromId(4);
+static region timerRepeatOnRegion = RegionFromId(5);
+static region timerRepeatOffRegion = RegionFromId(6);
 
 bool gt_enterStart(bool testConds, bool runActions) {
   if (!runActions) { return true; }
@@ -50,9 +52,12 @@ void gg_MapInit() {
   timerExample();
 }
 
+timer gg_repeatingTimer;
+bool gg_timerPaused = false;
 bool gt_repeatingTimerCallback(bool testConds, bool runActions) {
   unitgroup ug;
   if (!runActions) { return true; }
+  if (gg_timerPaused) { return true; }
   ug = gg_createUnitsInRegion(1, "Hellion", 2, timerspawnRegion, "center");
   gg_groupIssueOrderToPoint(ug, "move", gg_pointFromRegion(deathRegion, "center"), "addtoend");
   return true;
@@ -62,6 +67,25 @@ bool gt_timerCallback(bool testConds, bool runActions) {
   gg_timer_createRepeating(2.0, "gt_repeatingTimerCallback");
   return true;
 }
+bool gg_timerRepeatOnTriggered(bool testConds, bool runActions) {
+  if (!runActions) { return true; }
+  gg_log("on");
+  gg_timerPaused = false;
+  // > doesn't work? TimerPause(gg_repeatingTimer, false);
+  return true;
+}
+bool gg_timerRepeatOffTriggered(bool testConds, bool runActions) {
+  if (!runActions) { return true; }
+  gg_log("off");
+  gg_timerPaused = true;
+  // > TimerPause(gg_repeatingTimer, true);
+  return true;
+}
 void timerExample() {
-  gg_timer_create(1.0, "gt_timerCallback");
+  unitgroup ug;
+  gg_repeatingTimer = gg_timer_create(1.0, "gt_timerCallback");
+  // Drone can be moved between ON/OFF positions to control the timer.
+  gg_createUnitInRegion(1, "Drone", timerRepeatOnRegion, "center");
+  gg_event_unitEnteredRegion("gg_timerRepeatOnTriggered", null, timerRepeatOnRegion);
+  gg_event_unitEnteredRegion("gg_timerRepeatOffTriggered", null, timerRepeatOffRegion);
 }
