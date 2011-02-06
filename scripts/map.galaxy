@@ -1,20 +1,7 @@
 static point p1start = Point(15, 45);
 static point p2start = Point(35, 45);
 
-bool trigger_train(bool testConds, bool runActions);
-
-void gg_MapInit() {
-  unitgroup ug1;
-  unitgroup ug2;
-  ug1 = gg_createUnitsAtPoint(1, "Barracks", 1, p1start);
-  ug2 = gg_createUnitsAtPoint(2, "Barracks", 1, p2start);
-  gg_groupIssueOrder(ug1, "barracks train marine", "replace");
-  gg_groupIssueOrder(ug2, "barracks train marine", "replace");
-
-  gg_event_unitTrained("trigger_train", null);
-}
-
-bool trigger_train(bool testConds, bool runActions) {
+bool trigger_trained(bool testConds, bool runActions) {
   point target;
   if (!runActions) { return true; }
   if (UnitGetOwner(EventUnitProgressUnit()) == 1) {
@@ -25,4 +12,25 @@ bool trigger_train(bool testConds, bool runActions) {
   gg_issueOrder(EventUnit(), "barracks train marine", "replace");
   gg_issueOrderToPoint(EventUnitProgressUnit(), "attack", target, "replace");
   return true;
+}
+
+bool trigger_constructed(bool testConds, bool runActions) {
+  if (!runActions) { return true; }
+  gg_issueOrder(EventUnitProgressUnit(), "barracks train marine", "replace");
+  return true;
+}
+
+void initPlayer(int player, point start, point target) {
+  unitgroup ug;
+  ug = gg_createUnitsAtPoint(player, "SCV", 1, start);
+  gg_setPlayerMinerals(player, 1000);
+}
+
+void gg_MapInit() {
+
+  initPlayer(1, p1start, p2start);
+  initPlayer(2, p2start, p1start);
+
+  gg_event_unitTrained("trigger_trained", null);
+  gg_event_unitConstructed("trigger_constructed", null);
 }

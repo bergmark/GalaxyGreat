@@ -93,6 +93,9 @@ void gg_event_unitLeftRegion(string callback, unitref u, region reg) {
 void gg_event_unitTrained(string callback, unitref u) {
   TriggerAddEventUnitTrainProgress(TriggerCreate(callback), u, c_unitProgressStageComplete);
 }
+void gg_event_unitConstructed(string callback, unitref u) {
+  TriggerAddEventUnitConstructProgress(TriggerCreate(callback), u, c_unitProgressStageComplete);
+}
 
 timer gg_timer_createRepeating(fixed interval, string callback) {
   timer t = TimerCreate();
