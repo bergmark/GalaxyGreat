@@ -1,24 +1,21 @@
-static region p1start = RegionFromId(1);
-static region p2start = RegionFromId(2);
+static point p1start = Point(15, 45);
+static point p2start = Point(35, 45);
 
-trigger gt_trainmoar;
-
-bool gt_trainmoar_Func(bool testConds, bool runActions);
+bool trigger_train(bool testConds, bool runActions);
 
 void gg_MapInit() {
   unitgroup ug1;
   unitgroup ug2;
-  ug1 = gg_createUnitsInRegion(1, "Barracks", 1, p1start, "center");
-  ug2 = gg_createUnitsInRegion(2, "Barracks", 1, p2start, "center");
+  ug1 = gg_createUnitsAtPoint(1, "Barracks", 1, p1start);
+  ug2 = gg_createUnitsAtPoint(2, "Barracks", 1, p2start);
   gg_groupIssueOrder(ug1, "barracks train marine", "replace");
   gg_groupIssueOrder(ug2, "barracks train marine", "replace");
 
-  gt_trainmoar = TriggerCreate("gt_trainmoar_Func");
-  TriggerAddEventUnitTrainProgress(gt_trainmoar, null, c_unitProgressStageComplete);
+  gg_event_unitTrained("trigger_train", null);
 }
 
-bool gt_trainmoar_Func (bool testConds, bool runActions) {
-  region target;
+bool trigger_train(bool testConds, bool runActions) {
+  point target;
   if (!runActions) { return true; }
   if (UnitGetOwner(EventUnitProgressUnit()) == 1) {
     target = p2start;
@@ -26,6 +23,6 @@ bool gt_trainmoar_Func (bool testConds, bool runActions) {
     target = p1start;
   }
   gg_issueOrder(EventUnit(), "barracks train marine", "replace");
-  gg_issueOrderToPoint(EventUnitProgressUnit(), "attack", gg_pointFromRegion(target, "center"), "replace");
+  gg_issueOrderToPoint(EventUnitProgressUnit(), "attack", target, "replace");
   return true;
 }
