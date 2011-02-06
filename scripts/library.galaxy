@@ -43,6 +43,12 @@ abilcmd gg_abilityCommandFromString(string commandName) {
   if (StringEqual(commandName, "dance", c_stringNoCase)) {
     return AbilityCommand("stop", 3);
   }
+  if (StringEqual(commandName, "barracks train marine", c_stringNoCase)) {
+    return AbilityCommand("BarracksTrain", 0);
+  }
+  if (StringEqual(commandName, "attack", c_stringNoCase)) {
+    return AbilityCommand("attack", 0);
+  }
   gg_log("Missing commandName name in gg_abilityCommandFromString");
   return AbilityCommand("move", 0);
 }
@@ -58,11 +64,11 @@ int gg_abilityOrderQueueFromString(string s) {
 }
 
 void gg_issueOrder(unit u, string cmd, string p) {
-  UnitIssueOrder(u, Order(gg_abilityCommandFromString("dance")),
+  UnitIssueOrder(u, Order(gg_abilityCommandFromString(cmd)),
                  gg_abilityOrderQueueFromString(p));
 }
 void gg_issueOrderToPoint(unit u, string cmd, point pt, string p) {
-  UnitIssueOrder(u, OrderTargetingPoint(gg_abilityCommandFromString("move"), pt),
+  UnitIssueOrder(u, OrderTargetingPoint(gg_abilityCommandFromString(cmd), pt),
                  gg_abilityOrderQueueFromString(p));
 }
 void gg_groupIssueOrder(unitgroup ug, string cmd, string p) {
@@ -75,6 +81,7 @@ void gg_groupIssueOrderToPoint(unitgroup ug, string cmd, point pt, string p) {
 }
 
 void gg_killUnit(unit u) {
+  // > UnitKill() exists.
   UnitSetPropertyFixed(u, c_unitPropLife, 0.0);
 }
 void gg_event_unitEnteredRegion(string callback, unitref u, region reg) {

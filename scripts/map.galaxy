@@ -1,91 +1,31 @@
-static region deathRegion = RegionFromId(1);
-static region startRegion = RegionFromId(2);
-static region allRegion = RegionFromId(3);
-static region timerspawnRegion = RegionFromId(4);
-static region timerRepeatOnRegion = RegionFromId(5);
-static region timerRepeatOffRegion = RegionFromId(6);
+static region p1start = RegionFromId(1);
+static region p2start = RegionFromId(2);
 
-bool gt_enterStart(bool testConds, bool runActions) {
-  if (!runActions) { return true; }
-  gg_killUnit(EventUnit());
-  return true;
-}
-bool gt_leaveEnd(bool testConds, bool runActions) {
-  if (!runActions) { return true; }
-  UnitSetPropertyFixed(EventUnit(), c_unitPropLife, 10.0);
-  return true;
-}
+trigger gt_trainmoar;
 
-void timerExample();
+bool gt_trainmoar_Func(bool testConds, bool runActions);
 
 void gg_MapInit() {
-  unitgroup ug = UnitGroupEmpty();
-  unit u;
-  int i;
-  gg_log("Map Loaded");
-  gg_createVisibilityRevealer(1, allRegion);
-  gg_createUnitInRegion(1, "Marine", deathRegion, "center");
+  unitgroup ug1;
+  unitgroup ug2;
+  ug1 = gg_createUnitsInRegion(1, "Barracks", 1, p1start, "center");
+  ug2 = gg_createUnitsInRegion(2, "Barracks", 1, p2start, "center");
+  gg_groupIssueOrder(ug1, "barracks train marine", "replace");
+  gg_groupIssueOrder(ug2, "barracks train marine", "replace");
 
-  gg_setPlayerMinerals(1, 1000);
-  gg_setPlayerVespene(1, 2000);
-
-  u = gg_createUnitInRegion(1, "Marauder", startRegion, "random");
-  gg_issueOrder(u, "dance", "replace");
-  gg_issueOrderToPoint(u, "move", RegionGetCenter(deathRegion), "addtoend");
-
-  // u = gg_createUnitInRegion(1, "Sentry", startRegion, "random");
-  // UnitGroupAdd(ug, u);
-  // u = gg_createUnitInRegion(1, "Sentry", startRegion, "random");
-  // UnitGroupAdd(ug, u);
-  // i = UnitGroupCount(ug, c_unitCountAlive);
-  // while (i > 0) {
-  //   gg_issueOrderToPoint(UnitGroupUnit(ug, i), "move", RegionGetCenter(deathRegion), "addtoend");
-  //   i = i - 1;
-  // }
-  ug = gg_createUnitsInRegion(1, "Sentry", 10, startRegion, "center");
-  gg_groupIssueOrderToPoint(ug, "move", gg_pointFromRegion(deathRegion, "center"), "addtoend");
-
-  // Trigger for killing units.
-  gg_event_unitEnteredRegion("gt_enterStart", null, deathRegion);
-  gg_event_unitLeftRegion("gt_leaveEnd", null, startRegion);
-
-  timerExample();
+  gt_trainmoar = TriggerCreate("gt_trainmoar_Func");
+  TriggerAddEventUnitTrainProgress(gt_trainmoar, null, c_unitProgressStageComplete);
 }
 
-timer gg_repeatingTimer;
-bool gg_timerPaused = false;
-bool gt_repeatingTimerCallback(bool testConds, bool runActions) {
-  unitgroup ug;
+bool gt_trainmoar_Func (bool testConds, bool runActions) {
+  region target;
   if (!runActions) { return true; }
-  if (gg_timerPaused) { return true; }
-  ug = gg_createUnitsInRegion(1, "Hellion", 2, timerspawnRegion, "center");
-  gg_groupIssueOrderToPoint(ug, "move", gg_pointFromRegion(deathRegion, "center"), "addtoend");
+  if (UnitGetOwner(EventUnitProgressUnit()) == 1) {
+    target = p2start;
+  } else {
+    target = p1start;
+  }
+  gg_issueOrder(EventUnit(), "barracks train marine", "replace");
+  gg_issueOrderToPoint(EventUnitProgressUnit(), "attack", gg_pointFromRegion(target, "center"), "replace");
   return true;
-}
-bool gt_timerCallback(bool testConds, bool runActions) {
-  if (!runActions) { return true; }
-  gg_timer_createRepeating(2.0, "gt_repeatingTimerCallback");
-  return true;
-}
-bool gg_timerRepeatOnTriggered(bool testConds, bool runActions) {
-  if (!runActions) { return true; }
-  gg_log("on");
-  gg_timerPaused = false;
-  // > doesn't work? TimerPause(gg_repeatingTimer, false);
-  return true;
-}
-bool gg_timerRepeatOffTriggered(bool testConds, bool runActions) {
-  if (!runActions) { return true; }
-  gg_log("off");
-  gg_timerPaused = true;
-  // > TimerPause(gg_repeatingTimer, true);
-  return true;
-}
-void timerExample() {
-  unitgroup ug;
-  gg_repeatingTimer = gg_timer_create(1.0, "gt_timerCallback");
-  // Drone can be moved between ON/OFF positions to control the timer.
-  gg_createUnitInRegion(1, "Drone", timerRepeatOnRegion, "center");
-  gg_event_unitEnteredRegion("gg_timerRepeatOnTriggered", null, timerRepeatOnRegion);
-  gg_event_unitEnteredRegion("gg_timerRepeatOffTriggered", null, timerRepeatOffRegion);
 }
