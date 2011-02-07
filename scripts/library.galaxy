@@ -1,5 +1,4 @@
 void gg_log(string s) {
-  // > 1st arg? Player?
   TriggerDebugOutput(1, StringToText(s), true);
 }
 

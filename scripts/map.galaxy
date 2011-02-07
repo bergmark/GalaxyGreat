@@ -1,8 +1,10 @@
 static point p1start = Point(15, 45);
 static point p2start = Point(85, 45);
 
-static region p1BuildRegion = RegionRect(0, 20, 30, 70);
-static region p2BuildRegion = RegionRect(70, 20, 100, 70);
+static region p1BuildRegion = RegionRect(PointGetX(p1start) - 15, PointGetY(p1start) - 25,
+                                         PointGetX(p1start) + 15, PointGetY(p1start) + 25);
+static region p2BuildRegion = RegionRect(PointGetX(p2start) - 15, PointGetY(p2start) - 25,
+                                         PointGetX(p2start) + 15, PointGetY(p2start) + 25);
 
 void issueTrain(unit building) {
   if (UnitGetType(building) == "Barracks") {
@@ -49,20 +51,31 @@ bool trigger_cc_died(bool testConds, bool runActions) {
   return true;
 }
 
-bool trigger_building_died(bool testConds, bool runActions) {
+bool trigger_unitDied(bool testConds, bool runActions) {
   int player;
+  string unitType;
   if (!runActions) { return true; }
 
   player = UnitGetOwner(EventUnitDamageSourceUnit());
+  unitType = UnitGetType(EventUnit());
 
-  if (UnitGetType(EventUnit()) == "Barracks") {
+  if (unitType == "Barracks") {
     gg_incPlayerMinerals(player, 50);
-  }
-  if (UnitGetType(EventUnit()) == "EngineeringBay") {
+  } else if (unitType == "EngineeringBay") {
     gg_incPlayerMinerals(player, 50);
-  }
-  if (UnitGetType(EventUnit()) == "Bunker") {
+  } else if (unitType == "Bunker") {
     gg_incPlayerMinerals(player, 50);
+  } else if (unitType == "Marine") {
+    gg_incPlayerMinerals(player, 1);
+  } else if (unitType == "Marauder") {
+    gg_incPlayerMinerals(player, 2);
+  } else if (unitType == "Reaper") {
+    gg_incPlayerMinerals(player, 1);
+  } else if (unitType == "CommandCenter") {
+    // .
+  } else {
+    gg_log("Missing bounty for unit: ");
+    gg_log(unitType);
   }
   return true;
 }
@@ -79,7 +92,7 @@ void initPlayer(int player, point start, region buildRegion) {
   unit scv;
   cc = gg_createUnitAtPoint(player, "CommandCenter", start);
   scv = gg_createUnitAtPoint(player, "SCV", start);
-  gg_setPlayerMinerals(player, 1000);
+  gg_setPlayerMinerals(player, 500);
   gg_event_unitLeftRegion("trigger_leftRegion", UnitRefFromUnit(scv), buildRegion);
 }
 
@@ -90,5 +103,5 @@ void gg_MapInit() {
   gg_event_unitTrained("trigger_trained", null);
   gg_event_unitConstructed("trigger_constructed", null);
   gg_event_unitDied("trigger_cc_died", null);
-  gg_event_unitDied("trigger_building_died", null);
+  gg_event_unitDied("trigger_unitDied", null);
 }
