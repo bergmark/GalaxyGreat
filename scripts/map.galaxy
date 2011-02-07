@@ -1,6 +1,20 @@
 static point p1start = Point(15, 45);
 static point p2start = Point(35, 45);
 
+void issueTrain(unit building) {
+  if (UnitGetType(building) == "Barracks") {
+    gg_issueOrder(building, "barracks train marine", "replace");
+  } else if (UnitGetType(building) == "EngineeringBay") {
+    gg_issueOrder(building, "barracks train reaper", "replace");
+  } else if (UnitGetType(building) == "Bunker") {
+    gg_log("Build maraauder");
+    gg_issueOrder(building, "barracks train marauder", "replace");
+  } else {
+    gg_log("Unhandled building type: ");
+    gg_log(UnitGetType(building));
+  }
+}
+
 bool trigger_trained(bool testConds, bool runActions) {
   point target;
   if (!runActions) { return true; }
@@ -9,14 +23,14 @@ bool trigger_trained(bool testConds, bool runActions) {
   } else {
     target = p1start;
   }
-  gg_issueOrder(EventUnit(), "barracks train marine", "replace");
+  issueTrain(EventUnit());
   gg_issueOrderToPoint(EventUnitProgressUnit(), "attack", target, "replace");
   return true;
 }
 
 bool trigger_constructed(bool testConds, bool runActions) {
   if (!runActions) { return true; }
-  gg_issueOrder(EventUnitProgressUnit(), "barracks train marine", "replace");
+  issueTrain(EventUnitProgressUnit());
   return true;
 }
 
