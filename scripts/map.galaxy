@@ -33,17 +33,31 @@ bool trigger_constructed(bool testConds, bool runActions) {
   return true;
 }
 
-void initPlayer(int player, point start, point target) {
-  unitgroup ug;
-  ug = gg_createUnitsAtPoint(player, "SCV", 1, start);
+bool trigger_cc_died(bool testConds, bool runActions) {
+  if (!runActions) { return true; }
+  if (UnitGetType(EventUnit()) != "CommandCenter") { return true; }
+  if (UnitGetOwner(EventUnit()) == 1) {
+    gg_gameOver_victory(2);
+    gg_gameOver_defeat(1);
+  } else {
+    gg_gameOver_victory(1);
+    gg_gameOver_defeat(2);
+  }
+  return true;
+}
+
+void initPlayer(int player, point start) {
+  unit cc;
+  cc = gg_createUnitAtPoint(player, "CommandCenter", start);
+  gg_createUnitsAtPoint(player, "SCV", 1, start);
   gg_setPlayerMinerals(player, 1000);
 }
 
 void gg_MapInit() {
-
-  initPlayer(1, p1start, p2start);
-  initPlayer(2, p2start, p1start);
+  initPlayer(1, p1start);
+  initPlayer(2, p2start);
 
   gg_event_unitTrained("trigger_trained", null);
   gg_event_unitConstructed("trigger_constructed", null);
+  gg_event_unitDied("trigger_cc_died", null);
 }

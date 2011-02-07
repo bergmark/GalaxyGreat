@@ -3,6 +3,16 @@ void gg_log(string s) {
   TriggerDebugOutput(1, StringToText(s), true);
 }
 
+void gg_gameOver_victory(int player) {
+  GameOver(player, c_gameOverVictory, true, true);
+}
+void gg_gameOver_defeat(int player) {
+  GameOver(player, c_gameOverDefeat, true, true);
+}
+void gg_gameOver_tie(int player) {
+  GameOver(player, c_gameOverTie, true, true);
+}
+
 // playerIndex -1..15
 void gg_setPlayerMinerals(int playerIndex, int amount) {
   PlayerModifyPropertyInt(playerIndex, c_playerPropMinerals, c_playerPropOperSetTo, amount);
@@ -101,6 +111,9 @@ void gg_event_unitTrained(string callback, unitref u) {
 }
 void gg_event_unitConstructed(string callback, unitref u) {
   TriggerAddEventUnitConstructProgress(TriggerCreate(callback), u, c_unitProgressStageComplete);
+}
+void gg_event_unitDied(string callback, unitref u) {
+  TriggerAddEventUnitDied(TriggerCreate(callback), u);
 }
 
 timer gg_timer_createRepeating(fixed interval, string callback) {
