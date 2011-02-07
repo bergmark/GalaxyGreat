@@ -50,25 +50,25 @@ bool trigger_cc_died(bool testConds, bool runActions) {
   return true;
 }
 
-void initPlayer(int player, point start) {
-  unit cc;
-  cc = gg_createUnitAtPoint(player, "CommandCenter", start);
-  gg_createUnitsAtPoint(player, "SCV", 1, start);
-  gg_setPlayerMinerals(player, 1000);
-}
-
 bool trigger_leftRegion(bool testConds, bool runActions) {
   if (!runActions) { return true; }
   if (UnitGetType(EventUnit()) != "SCV") { return true; }
   UnitSetPosition(EventUnit(), RegionGetCenter(EventUnitRegion()), true);
   return true;
 }
-void gg_MapInit() {
-  initPlayer(1, p1start);
-  initPlayer(2, p2start);
 
-  gg_event_unitLeftRegion("trigger_leftRegion", null, p1BuildRegion);
-  gg_event_unitLeftRegion("trigger_leftRegion", null, p2BuildRegion);
+void initPlayer(int player, point start, region buildRegion) {
+  unit cc;
+  unit scv;
+  cc = gg_createUnitAtPoint(player, "CommandCenter", start);
+  scv = gg_createUnitAtPoint(player, "SCV", start);
+  gg_setPlayerMinerals(player, 1000);
+  gg_event_unitLeftRegion("trigger_leftRegion", UnitRefFromUnit(scv), buildRegion);
+}
+
+void gg_MapInit() {
+  initPlayer(1, p1start, p1BuildRegion);
+  initPlayer(2, p2start, p2BuildRegion);
 
   gg_event_unitTrained("trigger_trained", null);
   gg_event_unitConstructed("trigger_constructed", null);
