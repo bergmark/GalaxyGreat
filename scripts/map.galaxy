@@ -7,7 +7,6 @@ void issueTrain(unit building) {
   } else if (UnitGetType(building) == "EngineeringBay") {
     gg_issueOrder(building, "barracks train reaper", "replace");
   } else if (UnitGetType(building) == "Bunker") {
-    gg_log("Build maraauder");
     gg_issueOrder(building, "barracks train marauder", "replace");
   } else {
     gg_log("Unhandled building type: ");
