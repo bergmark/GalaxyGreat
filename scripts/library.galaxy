@@ -46,6 +46,12 @@ abilcmd gg_abilityCommandFromString(string commandName) {
   if (StringEqual(commandName, "barracks train marine", c_stringNoCase)) {
     return AbilityCommand("BarracksTrain", 0);
   }
+  if (StringEqual(commandName, "barracks train reaper", c_stringNoCase)) {
+    return AbilityCommand("BarracksTrain", 1);
+  }
+  if (StringEqual(commandName, "barracks train marauder", c_stringNoCase)) {
+    return AbilityCommand("BarracksTrain", 3);
+  }
   if (StringEqual(commandName, "attack", c_stringNoCase)) {
     return AbilityCommand("attack", 0);
   }
