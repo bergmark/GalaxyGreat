@@ -1,9 +1,8 @@
 static point p1start = Point(15, 45);
-static point p2start = Point(35, 45);
+static point p2start = Point(85, 45);
 
-// native region RegionRect (fixed minx, fixed miny, fixed maxx, fixed maxy);
-static region p1BuildRegion = RegionRect(10, 40, 20, 50);
-static region p2BuildRegion = RegionRect(30, 40, 40, 50);
+static region p1BuildRegion = RegionRect(0, 20, 30, 70);
+static region p2BuildRegion = RegionRect(70, 20, 100, 70);
 
 void issueTrain(unit building) {
   if (UnitGetType(building) == "Barracks") {
@@ -50,6 +49,24 @@ bool trigger_cc_died(bool testConds, bool runActions) {
   return true;
 }
 
+bool trigger_building_died(bool testConds, bool runActions) {
+  int player;
+  if (!runActions) { return true; }
+
+  player = UnitGetOwner(EventUnitDamageSourceUnit());
+
+  if (UnitGetType(EventUnit()) == "Barracks") {
+    gg_incPlayerMinerals(player, 50);
+  }
+  if (UnitGetType(EventUnit()) == "EngineeringBay") {
+    gg_incPlayerMinerals(player, 50);
+  }
+  if (UnitGetType(EventUnit()) == "Bunker") {
+    gg_incPlayerMinerals(player, 50);
+  }
+  return true;
+}
+
 bool trigger_leftRegion(bool testConds, bool runActions) {
   if (!runActions) { return true; }
   if (UnitGetType(EventUnit()) != "SCV") { return true; }
@@ -73,4 +90,5 @@ void gg_MapInit() {
   gg_event_unitTrained("trigger_trained", null);
   gg_event_unitConstructed("trigger_constructed", null);
   gg_event_unitDied("trigger_cc_died", null);
+  gg_event_unitDied("trigger_building_died", null);
 }
