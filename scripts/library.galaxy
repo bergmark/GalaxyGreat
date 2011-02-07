@@ -52,25 +52,28 @@ unitgroup gg_createUnitsAtPoint(int playerId, string unitName, int amount, point
 }
 
 abilcmd gg_abilityCommandFromString(string commandName) {
-  if (StringEqual(commandName, "move", c_stringNoCase)) {
+  if (commandName == "move") {
     return AbilityCommand("move", 0);
   }
-  if (StringEqual(commandName, "dance", c_stringNoCase)) {
+  if (commandName == "dance") {
     return AbilityCommand("stop", 3);
   }
-  if (StringEqual(commandName, "barracks train marine", c_stringNoCase)) {
+  if (commandName == "barracks train marine") {
     return AbilityCommand("BarracksTrain", 0);
   }
-  if (StringEqual(commandName, "barracks train reaper", c_stringNoCase)) {
+  if (commandName == "barracks train ghost") {
+    return AbilityCommand("BarracksTrain", 2);
+  }
+  if (commandName == "barracks train reaper") {
     return AbilityCommand("BarracksTrain", 1);
   }
-  if (StringEqual(commandName, "barracks train marauder", c_stringNoCase)) {
+  if (commandName == "barracks train marauder") {
     return AbilityCommand("BarracksTrain", 3);
   }
-  if (StringEqual(commandName, "attack", c_stringNoCase)) {
+  if (commandName == "attack") {
     return AbilityCommand("attack", 0);
   }
-  gg_log("Missing commandName name in gg_abilityCommandFromString");
+  gg_log("Missing commandName name in gg_abilityCommandFromString: ");
   return AbilityCommand("move", 0);
 }
 int gg_abilityOrderQueueFromString(string s) {
