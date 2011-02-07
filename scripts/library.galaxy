@@ -14,14 +14,20 @@ void gg_gameOver_tie(int player) {
 }
 
 // playerIndex -1..15
-void gg_setPlayerMinerals(int playerIndex, int amount) {
-  PlayerModifyPropertyInt(playerIndex, c_playerPropMinerals, c_playerPropOperSetTo, amount);
+void gg_setPlayerMinerals(int player, int amount) {
+  PlayerModifyPropertyInt(player, c_playerPropMinerals, c_playerPropOperSetTo, amount);
 }
-void gg_setPlayerVespene(int playerIndex, int amount) {
-  PlayerModifyPropertyInt(playerIndex, c_playerPropVespene, c_playerPropOperSetTo, amount);
+void gg_setPlayerVespene(int player, int amount) {
+  PlayerModifyPropertyInt(player, c_playerPropVespene, c_playerPropOperSetTo, amount);
 }
-void gg_createVisibilityRevealer(int playerId, region reg) {
-  VisRevealerCreate(playerId, reg);
+void gg_incPlayerMinerals(int player, int amount) {
+  PlayerModifyPropertyInt(player, c_playerPropMinerals, c_playerPropOperAdd, amount);
+}
+void gg_incPlayerVespene(int player, int amount) {
+  PlayerModifyPropertyInt(player, c_playerPropVespene, c_playerPropOperAdd, amount);
+}
+void gg_createVisibilityRevealer(int player, region reg) {
+  VisRevealerCreate(player, reg);
 }
 
 point gg_pointFromRegion(region reg, string regionLocation) {
