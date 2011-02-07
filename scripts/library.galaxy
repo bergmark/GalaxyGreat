@@ -100,6 +100,9 @@ void gg_killUnit(unit u) {
   // > UnitKill() exists.
   UnitSetPropertyFixed(u, c_unitPropLife, 0.0);
 }
+
+// Setting a unitref to null makes the event trigger for any unit.
+// Note that regions may not be null, so events cannot trigger for any region.
 void gg_event_unitEnteredRegion(string callback, unitref u, region reg) {
   TriggerAddEventUnitRegion(TriggerCreate(callback), u, reg, true);
 }

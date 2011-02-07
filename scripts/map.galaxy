@@ -1,6 +1,10 @@
 static point p1start = Point(15, 45);
 static point p2start = Point(35, 45);
 
+// native region RegionRect (fixed minx, fixed miny, fixed maxx, fixed maxy);
+static region p1BuildRegion = RegionRect(10, 40, 20, 50);
+static region p2BuildRegion = RegionRect(30, 40, 40, 50);
+
 void issueTrain(unit building) {
   if (UnitGetType(building) == "Barracks") {
     gg_issueOrder(building, "barracks train marine", "replace");
@@ -53,9 +57,18 @@ void initPlayer(int player, point start) {
   gg_setPlayerMinerals(player, 1000);
 }
 
+bool trigger_leftRegion(bool testConds, bool runActions) {
+  if (!runActions) { return true; }
+  if (UnitGetType(EventUnit()) != "SCV") { return true; }
+  UnitSetPosition(EventUnit(), RegionGetCenter(EventUnitRegion()), true);
+  return true;
+}
 void gg_MapInit() {
   initPlayer(1, p1start);
   initPlayer(2, p2start);
+
+  gg_event_unitLeftRegion("trigger_leftRegion", null, p1BuildRegion);
+  gg_event_unitLeftRegion("trigger_leftRegion", null, p2BuildRegion);
 
   gg_event_unitTrained("trigger_trained", null);
   gg_event_unitConstructed("trigger_constructed", null);
